@@ -19,6 +19,23 @@
     cursor: pointer;
 }
 
+
+.button-2 {
+    text-decoration: unset;
+    font-weight: 800;
+    text-transform: uppercase;
+    background-image: url(https://test.knowtical.com/wp-content/uploads/2024/07/right-arrow.png);
+    background-position: right center;
+    padding-right: 30px;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    color: #000000;
+}
+
+.button-2:hover {
+    color: #000000;
+}
+
 .pg-title {
 	font-weight: 600;
 	color: #000000;
@@ -29,6 +46,7 @@
 	font-size: 1rem;
 	font-weight: 600;
 	color: #035498;
+    line-height: unset;
 }
 
 .para-tag-1 {

@@ -56,8 +56,9 @@ get_header();
             </div>
 
             <div class="col-md-5 col-12">
-                <form class="form-parent" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
-                <input type="hidden" name="action" value="submit_contact_form">
+                <form class="form-parent" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post">
+                    <?php wp_nonce_field('submit_contact_form', 'contact_form_nonce'); ?>
+                    <input type="hidden" name="action" value="submit_contact_form">
                     <label for="name">Full Name:</label><br>
                     <input type="text" id="name" name="name" required><br>
                     
@@ -79,7 +80,7 @@ get_header();
                         <option value="Other">Other</option>
                     </select><br>
 
-                    <label for="school">School/Institute name</label><br>
+                    <label for="school">School/Institute name:</label><br>
                     <input type="text" id="school" name="school"><br>
 
                     <label for="message">Message:</label><br>
@@ -87,6 +88,7 @@ get_header();
                     
                     <input type="submit" class="button" value="Submit">
                 </form>
+
             </div>
         </div>
     </div>

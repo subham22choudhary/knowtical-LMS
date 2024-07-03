@@ -9,6 +9,8 @@ register_nav_menus(
 
 
 // Courses
+// Register Custom Post Type for Courses
+
 function create_courses_post_type() {
     $labels = array(
         'name'                  => _x('Courses', 'Post Type General Name', 'text_domain'),
@@ -44,9 +46,9 @@ function create_courses_post_type() {
         'label'                 => __('Course', 'text_domain'),
         'description'           => __('Course Description', 'text_domain'),
         'labels'                => $labels,
-        'supports'              => array('title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields',),
+        'supports'              => array('title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', 'page-attributes'),
         'taxonomies'            => array('category', 'post_tag'),
-        'hierarchical'          => false,
+        'hierarchical'          => true,
         'public'                => true,
         'show_ui'               => true,
         'show_in_menu'          => true,
@@ -62,8 +64,39 @@ function create_courses_post_type() {
 
     register_post_type('course', $args);
 }
-
 add_action('init', 'create_courses_post_type', 0);
+
+// Add Meta Boxes for Course Type
+function add_course_meta_boxes() {
+    add_meta_box(
+        'course_type_meta_box', // ID
+        'Course Type', // Title
+        'display_course_type_meta_box', // Callback
+        'course', // Screen
+        'side', // Context
+        'high' // Priority
+    );
+}
+add_action('add_meta_boxes', 'add_course_meta_boxes');
+
+function display_course_type_meta_box($post) {
+    $course_type = get_post_meta($post->ID, 'course_type', true);
+    ?>
+    <label for="course_type">Course Type:</label>
+    <select name="course_type" id="course_type_select">
+        <option value="main" <?php selected($course_type, 'main'); ?>>Main Course</option>
+        <option value="sub" <?php selected($course_type, 'sub'); ?>>Sub Course</option>
+    </select>
+    <?php
+}
+
+
+function save_course_meta_box($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!isset($_POST['course_type'])) return;
+    update_post_meta($post_id, 'course_type', sanitize_text_field($_POST['course_type']));
+}
+add_action('save_post', 'save_course_meta_box');
 
 
 // Blogs
@@ -180,5 +213,42 @@ function create_event_post_type() {
 }
 
 add_action('init', 'create_event_post_type', 0);
+
+
+
+
+// Contact Us Page
+
+function handle_form_submission() {
+    // Check the nonce for security
+    if (!isset($_POST['contact_form_nonce']) || !wp_verify_nonce($_POST['contact_form_nonce'], 'submit_contact_form')) {
+        wp_die('Nonce verification failed.');
+    }
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'contact_form_submissions';
+
+    $name = sanitize_text_field($_POST['name']);
+    $email = sanitize_email($_POST['email']);
+    $phone = sanitize_text_field($_POST['phone']);
+    $role = sanitize_text_field($_POST['Role']);
+    $school = sanitize_text_field($_POST['school']);
+    $message = sanitize_textarea_field($_POST['message']);
+
+    $wpdb->insert($table_name, [
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'role' => $role,
+        'school' => $school,
+        'message' => $message,
+        'submitted_at' => current_time('mysql')
+    ]);
+
+    wp_redirect(home_url('/thank-you'));
+    exit;
+}
+add_action('admin_post_nopriv_submit_contact_form', 'handle_form_submission');
+add_action('admin_post_submit_contact_form', 'handle_form_submission');
 
 ?>

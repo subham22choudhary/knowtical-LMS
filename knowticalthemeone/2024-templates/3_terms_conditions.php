@@ -36,14 +36,14 @@ get_header();
 
         .sec-2-2 {
             box-shadow: 2px 0px 7px 0px rgba(0, 0, 0, 0.33);
-            min-width: 13rem;
+            min-width: 18rem;
         }
 
 
         .sec-2-2-text button.active {
             background: black;
             color: #fff;
-            padding: 0.5rem 5rem 0.5rem 1rem;
+            padding: 0.5rem;
             border: unset;
             text-align: left;
             font-weight: 700;
@@ -51,10 +51,11 @@ get_header();
 
 
         .sec-2-2-text button {
-            padding: 0.5rem 5rem 0.5rem 1rem;
+            padding: 0.5rem;
             border: unset;
             text-align: left;
             font-weight: 700;
+            font-size: 0.95rem;
         }
 
 
@@ -71,220 +72,257 @@ get_header();
 
         .sec-2-3-1 {
             display: flex;
+            align-items: center;
         }
+
+        .sec-2-3-1 h2 {
+            margin-bottom: 0rem;
+         }
+
+
+         div#v-pills-tabContent {
+            margin-left: 0rem;
+         }
+
+         .sec-2-3-1, .sec-2-3-2{
+            margin-left: 2rem;
+         }
+
+
+         @media screen and (max-width: 768px) {
+
+            .sec-2-1 {
+               display: unset;
+            }
+
+            .sec-2-2 {
+               min-width: unset;
+            }
+
+            .sec-2-3 {
+               margin: 1rem;
+            }
+
+            .sec-2-3-1, .sec-2-3-2 {
+               margin-left: 0rem;
+            }
+
+            .sec-2-2-text button, .sec-2-2-text button.active{
+               text-align: center;
+            }
+
+         }
     </style>
 
 
-<section class="sec-2 mt-4">
-   <div class="sec-2-1">
-      <div class="sec-2-2">
-         <div class="nav flex-column nav-pills sec-2-2-text" id="v-pills-tab" role="tablist"
-            aria-orientation="vertical">
-            <button class="active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home"
-               type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Terms of Use</button>
-            <button class="" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
-               type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Conditions</button>
-            <button class="" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
-               type="button" role="tab" aria-controls="v-pills-messages"
-               aria-selected="false">Our Legal</button>
-            <button class="" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings"
-               type="button" role="tab" aria-controls="v-pills-settings"
-               aria-selected="false">Our Policies</button>
-         </div>
-      </div>
-      <div class="sec-2-3">
-         <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
-               aria-labelledby="v-pills-home-tab">
-               <div class="sec-2-3-1">
-                  <div>
-                     <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
-                  </div>
-                  <div>
-                     <h2>Terms of Use</h2>
-                     <p>Last Updated: April 22, 2024</p>
-                  </div>
-               </div>
-               <div>
-                  <p>1Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>2Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>3Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>4Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>5Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>1Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>2Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>3Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>4Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>5Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>1Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>2Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>3Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>4Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>5Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>1Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>2Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>3Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>4Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>5Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>1Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>2Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>3Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>4Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-                  <p>5Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at
-                     ullam
-                     repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                     laboriosam dolor. Explicabo, qui.
-                  </p>
-               </div>
-            </div>
-            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-               aria-labelledby="v-pills-profile-tab">
-               <div class="sec-2-3-1">
-                  <div>
-                     <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
-                  </div>
-                  <div>
-                     <h2>Conditions</h2>
-                     <p>Last Updated: April 22, 2024</p>
-                  </div>
-               </div>
-               <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at ullam
-                  repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                  laboriosam dolor. Explicabo, qui.
-               </p>
-            </div>
-            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
-               aria-labelledby="v-pills-messages-tab">
-               <div class="sec-2-3-1">
-                  <div>
-                     <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
-                  </div>
-                  <div>
-                     <h2>Our Legal</h2>
-                     <p>Last Updated: April 22, 2024</p>
-                  </div>
-               </div>
-               <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at ullam
-                  repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                  laboriosam dolor. Explicabo, qui.
-               </p>
-            </div>
-            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
-               aria-labelledby="v-pills-settings-tab">
-               <div class="sec-2-3-1">
-                  <div>
-                     <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
-                  </div>
-                  <div>
-                     <h2>Our Policies</h2>
-                     <p>Last Updated: April 22, 2024</p>
-                  </div>
-               </div>
-               <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae dolore magni, est, et at ullam
-                  repellendus consequatur deleniti ab necessitatibus consectetur ipsa veritatis iure quia cum
-                  laboriosam dolor. Explicabo, qui.
-               </p>
+   <section class="sec-2 mt-4">
+      <div class="sec-2-1">
+         <div class="sec-2-2">
+            <div class="nav flex-column nav-pills sec-2-2-text" id="v-pills-tab" role="tablist"
+               aria-orientation="vertical">
+
+
+
+               <?php 
+               $tnc_title_1 = get_field('tnc_title_1');
+               if ($tnc_title_1) : ?>
+               <button class="tnc-title-cta active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home"
+                  type="button" role="tab" aria-controls="v-pills-home" aria-selected="true"><?php echo $tnc_title_1; ?></button>
+               <?php endif; ?>
+
+
+
+               <?php 
+               $tnc_title_2 = get_field('tnc_title_2');
+               if ($tnc_title_2) : ?>
+               <button class="tnc-title-cta " id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
+                  type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><?php echo $tnc_title_2; ?></button>
+               <?php endif; ?>
+
+               <?php 
+               $tnc_title_3 = get_field('tnc_title_3');
+               if ($tnc_title_3) : ?>
+               <button class="tnc-title-cta " id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
+                  type="button" role="tab" aria-controls="v-pills-messages"
+                  aria-selected="false"><?php echo $tnc_title_3; ?></button>
+
+                  <?php endif; ?>
+
+
+                  <?php 
+               $tnc_title_4 = get_field('tnc_title_4');
+               if ($tnc_title_4) : ?>
+               <button class="tnc-title-cta " id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings"
+                  type="button" role="tab" aria-controls="v-pills-settings"
+                  aria-selected="false"><?php echo $tnc_title_4; ?></button>
+                  <?php endif; ?>
+
+
+
+
+
+                  <?php 
+               $tnc_title_5 = get_field('tnc_title_5');
+               if ($tnc_title_5) : ?>
+               <button class="tnc-title-cta " id="v-pills-five-tab" data-bs-toggle="pill" data-bs-target="#v-pills-five"
+                  type="button" role="tab" aria-controls="v-pills-five"
+                  aria-selected="false"><?php echo $tnc_title_5; ?></button>
+                  <?php endif; ?>
+
+
+
+
+                  <?php 
+               $tnc_title_6 = get_field('tnc_title_6');
+               if ($tnc_title_6) : ?>
+               <button class="tnc-title-cta " id="v-pills-six-tab" data-bs-toggle="pill" data-bs-target="#v-pills-six"
+                  type="button" role="tab" aria-controls="v-pills-six"
+                  aria-selected="false"><?php echo $tnc_title_6; ?></button>
+                  <?php endif; ?>
+
+                  
             </div>
          </div>
+         <div class="sec-2-3">
+            <div class="tab-content" id="v-pills-tabContent">
+
+
+               <?php 
+               $tnc_desc_1 = get_field('tnc_desc_1');
+               if ($tnc_desc_1) : ?>
+               <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                  aria-labelledby="v-pills-home-tab">
+                  <div class="sec-2-3-1">
+                     <div>
+                        <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
+                     </div>
+                     <div>
+                        <h2><?php echo $tnc_title_1; ?></h2>
+                     </div>
+                  </div>
+                  <div class="sec-2-3-2">
+                     <?php echo $tnc_desc_1; ?>
+                  </div>
+               </div>
+               <?php endif; ?>
+
+
+
+               <?php 
+               $tnc_desc_2 = get_field('tnc_desc_2');
+               if ($tnc_desc_2) : ?>
+               <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
+                  aria-labelledby="v-pills-profile-tab">
+                  <div class="sec-2-3-1">
+                     <div>
+                        <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
+                     </div>
+                     <div>
+                        <h2><?php echo $tnc_title_2; ?></h2>
+                     </div>
+                  </div>
+                  <div class="sec-2-3-2">
+                     <?php echo $tnc_desc_2; ?>
+                  </div>
+               </div>
+               <?php endif; ?>
+
+
+
+               <?php 
+               $tnc_desc_3 = get_field('tnc_desc_3');
+               if ($tnc_desc_3) : ?>
+               <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
+                  aria-labelledby="v-pills-messages-tab">
+                  <div class="sec-2-3-1">
+                     <div>
+                        <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
+                     </div>
+                     <div>
+                        <h2><?php echo $tnc_title_3; ?></h2>
+                     </div>
+                  </div>
+                  <div class="sec-2-3-2">
+                     <?php echo $tnc_desc_3; ?>
+                  </div>
+               </div>
+               <?php endif; ?>
+
+
+               <?php 
+               $tnc_desc_4 = get_field('tnc_desc_4');
+               if ($tnc_desc_4) : ?>
+               <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
+                  aria-labelledby="v-pills-settings-tab">
+                  <div class="sec-2-3-1">
+                     <div>
+                        <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
+                     </div>
+                     <div>
+                        <h2><?php echo $tnc_title_4; ?></h2>
+                     </div>
+                  </div>
+                  <div>
+                  <div class="sec-2-3-2">
+                     <?php echo $tnc_desc_4; ?>
+                  </div>
+                  </div>
+               </div>
+               <?php endif; ?>
+
+
+
+
+               <?php 
+               $tnc_desc_5 = get_field('tnc_desc_5');
+               if ($tnc_desc_5) : ?>
+               <div class="tab-pane fade" id="v-pills-five" role="tabpanel"
+                  aria-labelledby="v-pills-five-tab">
+                  <div class="sec-2-3-1">
+                     <div>
+                        <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
+                     </div>
+                     <div>
+                        <h2><?php echo $tnc_title_5; ?></h2>
+                     </div>
+                  </div>
+                  <div>
+                  <div class="sec-2-3-2">
+                     <?php echo $tnc_desc_5; ?>
+                  </div>
+                  </div>
+               </div>
+               <?php endif; ?>
+
+
+
+               <?php 
+               $tnc_desc_6 = get_field('tnc_desc_6');
+               if ($tnc_desc_6) : ?>
+               <div class="tab-pane fade" id="v-pills-six" role="tabpanel"
+                  aria-labelledby="v-pills-six-tab">
+                  <div class="sec-2-3-1">
+                     <div>
+                        <img src="https://uds-assets.udacity.com/glyphs/v2/clipboard-two.svg" class="img-fluid" alt="Knowtical">
+                     </div>
+                     <div>
+                        <h2><?php echo $tnc_title_6; ?></h2>
+                     </div>
+                  </div>
+                  <div>
+                  <div class="sec-2-3-2">
+                     <?php echo $tnc_desc_6; ?>
+                  </div>
+                  </div>
+               </div>
+               <?php endif; ?>
+
+
+
+            </div>
+         </div>
       </div>
-   </div>
-</section>
+   </section>
 
 
 

@@ -65,7 +65,7 @@ get_header();
                         <div class="blog-card">
                             <h1 class="title-tag-1"><?php the_title(); ?></h2>
                             <p class="para-tag-1"><?php the_excerpt(); ?></p>
-                            <a href="<?php the_permalink(); ?>" class="button">Read More</a>
+                            <a href="<?php the_permalink(); ?>" class="button-2">Read More</a>
                         </div>
                     </div>
 

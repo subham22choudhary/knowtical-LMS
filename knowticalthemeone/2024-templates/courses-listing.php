@@ -33,29 +33,29 @@ get_header();
                 'post_type' => 'course', 
                 'posts_per_page' => -1,
                 'order' => 'DESC',
-                'orderby' => 'date', 
+                'orderby' => 'date',
+                'meta_query' => array(
+                    array(
+                        'key' => 'course_type',
+                        'value' => 'main',
+                        'compare' => '='
+                    )
+                )
             );
 
             $courses_query = new WP_Query($args);
 
             if ($courses_query->have_posts()) :
-                // echo '<p>Courses found: ' . $courses_query->found_posts . '</p>'; 
                 while ($courses_query->have_posts()) : $courses_query->the_post();
             ?>
 
-
-
-
                     <div class="col-md-4 col-12 my-3 my-md-0 my-lg-0">
-
                         <div class="course-card">
-                            <h1 class="title-tag-1"><?php the_title(); ?></h2>
+                            <h1 class="title-tag-1"><?php the_title(); ?></h1>
                             <p class="para-tag-1"><?php the_excerpt(); ?></p>
-                            <a href="<?php the_permalink(); ?>" class="button">Read More</a>
+                            <a href="<?php the_permalink(); ?>" class="button-2">Read More</a>
                         </div>
-
                     </div>
-
 
                 <?php
                     endwhile;
@@ -70,6 +70,13 @@ get_header();
 
     </main>
 </div>
+
+
+
+
+
+
+
 
 
 <?php
