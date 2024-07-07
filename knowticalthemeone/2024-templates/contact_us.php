@@ -44,9 +44,7 @@ get_header();
     <div class="container">
         <div class="row justify-content-center">
 
-        <h2 class="text-center mb-3">Contact US</h2>
-
-            <div class="col-md-5 col-12 col-md-5 col-12 mb-4 mb-md-0 mb-lg-0">
+            <div class="col-md-4 col-12 mb-4 mb-md-0 mb-lg-0">
                 <div class="con-set1">
                     <div class="con-set-cont">
                         <p>Email: Testing@gmail.com</p>
@@ -56,38 +54,78 @@ get_header();
             </div>
 
             <div class="col-md-5 col-12">
-                <form class="form-parent" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post">
-                    <?php wp_nonce_field('submit_contact_form', 'contact_form_nonce'); ?>
-                    <input type="hidden" name="action" value="submit_contact_form">
-                    <label for="name">Full Name:</label><br>
-                    <input type="text" id="name" name="name" required><br>
-                    
-                    <label for="email">Email:</label><br>
-                    <input type="email" id="email" name="email" required><br>
 
-                    <label for="phone">Mobile Number:</label><br>
-                    <input type="tel" id="phone" name="phone" required><br>
-                    
-                    <label for="Role">Role:</label><br>
-                    <select id="Role" name="Role" required>
-                        <option value="Principal">Principal</option>
-                        <option value="Trustee">Trustee</option>
-                        <option value="Teacher">Teacher</option>
-                        <option value="IT Manager">IT Manager</option>
-                        <option value="Consultant">Consultant</option>
-                        <option value="Parent">Parent</option>
-                        <option value="Student">Student</option>
-                        <option value="Other">Other</option>
-                    </select><br>
+                <?php
+                    if (isset($_POST['submitinsert'])) {
+                        $a = $_POST['fullname'];
+                        $b = $_POST['email'];
+                        $c2 = $_POST['mobile'];
+                        $d = $_POST['roles'];
+                        $e = $_POST['schools'];
+                        $f = $_POST['messages'];
 
-                    <label for="school">School/Institute name:</label><br>
-                    <input type="text" id="school" name="school"><br>
+                        global $wpdb;
 
-                    <label for="message">Message:</label><br>
-                    <textarea id="message" name="message" rows="4" cols="50"></textarea><br>
-                    
-                    <input type="submit" class="button" value="Submit">
-                </form>
+                        $sql3 = $wpdb->insert("contactusdata", array(
+                            "fullname" => $a,
+                            "email" => $b,
+                            "mobile" => $c2,
+                            "roles" => $d,
+                            "schools" => $e,
+                            "messages" => $f
+                        ));
+
+                        if ($sql3 == true) {
+                            // Redirect to thank you page after successful insertion
+                            wp_redirect(get_site_url() . '/thank-you/');
+                            exit;
+                        } else {
+                            echo "<script>console.log('data not inserted');</script>";
+                        }
+                    }
+                ?>
+
+                <div class="contact-form">
+                    <h2>Get in touch</h2>
+                    <p>Submit a message and we will get back to you.</p>
+
+                    <form method="POST" class="contactus-form">
+                        <div class="d-flex">
+                            <div>
+                                <h6 class="mb-0">Full name</h6>
+                                <input type="text" class="mb-3" name="fullname" placeholder="John Doe">
+
+                                <h6 class="mb-0">Email</h6>
+                                <input type="text" class="mb-3" name="email" placeholder="you@email.com">
+
+                                <h6 class="mb-0">Mobile No</h6>
+                                <input type="text" class="mb-3" name="mobile" placeholder="9876543210">
+
+                                <h6 class="mb-0">Your role</h6>
+                                <select name="roles" class="mb-3">
+                                    <option value="principal">Principal</option>
+                                    <option value="trustee">Trustee</option>
+                                    <option value="teacher">Teacher</option>
+                                    <option value="itManager">IT Manager</option>
+                                    <option value="consultant">Consultant</option>
+                                    <option value="parent">Parent</option>
+                                    <option value="student">Student</option>
+                                    <option value="others">Others</option>
+                                </select>
+
+                                <h6 class="mb-0">School/Institute name</h6>
+                                <input type="text" class="mb-3" name="schools" placeholder="Superhero Academy">
+                            </div>
+
+                            <div>
+                                <h6 class="mb-0">Message</h6>
+                                <textarea id="comments" class="mb-3" name="messages" rows="4" cols="40" placeholder="How might we help you?"></textarea>
+
+                                <input type="submit" class="button" value="Insert Record" name="submitinsert">
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
             </div>
         </div>

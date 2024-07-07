@@ -219,36 +219,4 @@ add_action('init', 'create_event_post_type', 0);
 
 // Contact Us Page
 
-function handle_form_submission() {
-    // Check the nonce for security
-    if (!isset($_POST['contact_form_nonce']) || !wp_verify_nonce($_POST['contact_form_nonce'], 'submit_contact_form')) {
-        wp_die('Nonce verification failed.');
-    }
-
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'contact_form_submissions';
-
-    $name = sanitize_text_field($_POST['name']);
-    $email = sanitize_email($_POST['email']);
-    $phone = sanitize_text_field($_POST['phone']);
-    $role = sanitize_text_field($_POST['Role']);
-    $school = sanitize_text_field($_POST['school']);
-    $message = sanitize_textarea_field($_POST['message']);
-
-    $wpdb->insert($table_name, [
-        'name' => $name,
-        'email' => $email,
-        'phone' => $phone,
-        'role' => $role,
-        'school' => $school,
-        'message' => $message,
-        'submitted_at' => current_time('mysql')
-    ]);
-
-    wp_redirect(home_url('/thank-you'));
-    exit;
-}
-add_action('admin_post_nopriv_submit_contact_form', 'handle_form_submission');
-add_action('admin_post_submit_contact_form', 'handle_form_submission');
-
 ?>

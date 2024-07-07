@@ -223,9 +223,7 @@ get_header();  ?>
 
         @media only screen and (min-width: 1281px) {
 
-            .swiper-button-next {
-                top: -29.65rem;
-            }
+
 
             .swiper-wrapper img {
                 min-height: 27rem;
