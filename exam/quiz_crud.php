@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// Check if the user is logged in
+if (!isset($_SESSION['name'])) {
+    die("You must be logged in to view this page.");
+}
+
 // Database connection
 $host = '127.0.0.1:3306';
 $username = 'u304902958_knlms';
@@ -15,13 +20,14 @@ if ($conn->connect_error) {
 // Create Quiz
 if (isset($_POST['create_quiz'])) {
     $quiz_name = $conn->real_escape_string($_POST['quiz_name']);
+    $creator_name = $_SESSION['name']; // Assuming the user's name is stored in the session
 
     // Check if the quiz already exists
     $check_sql = "SELECT * FROM quizzes WHERE quiz_name = '$quiz_name'";
     $check_result = $conn->query($check_sql);
     if ($check_result->num_rows == 0) {
         // Insert quiz into database
-        $sql = "INSERT INTO quizzes (quiz_name) VALUES ('$quiz_name')";
+        $sql = "INSERT INTO quizzes (quiz_name, creator_name) VALUES ('$quiz_name', '$creator_name')";
         if ($conn->query($sql) === TRUE) {
             $quiz_id = $conn->insert_id;
 
@@ -53,19 +59,6 @@ if (isset($_POST['create_quiz'])) {
     }
 }
 
-// Update Quiz
-// if (isset($_POST['update_quiz'])) {
-//     $quiz_id = $conn->real_escape_string($_POST['quiz_id']);
-//     $quiz_name = $conn->real_escape_string($_POST['quiz_name']);
-
-//     $sql = "UPDATE quizzes SET quiz_name = '$quiz_name' WHERE id = $quiz_id";
-//     if ($conn->query($sql) === TRUE) {
-//         echo "Quiz updated successfully";
-//     } else {
-//         echo "Error: " . $conn->error;
-//     }
-// }
-
 // Delete Quiz
 if (isset($_POST['delete_quiz'])) {
     $quiz_id = $conn->real_escape_string($_POST['quiz_id']);
@@ -91,11 +84,14 @@ if (isset($_POST['delete_quiz'])) {
     }
 }
 
-// Fetch quizzes, questions, and options
+// Fetch quizzes, questions, and options for the logged-in user only
+$logged_in_user = $_SESSION['name'];
+
 $sql = "
     SELECT 
         quizzes.id AS quiz_id,
         quizzes.quiz_name, 
+        quizzes.creator_name,
         questions.id AS question_id, 
         questions.question_name, 
         questions.time_alloted,
@@ -104,6 +100,7 @@ $sql = "
     FROM quizzes
     LEFT JOIN questions ON quizzes.id = questions.quiz_id
     LEFT JOIN options ON questions.id = options.question_id
+    WHERE quizzes.creator_name = '$logged_in_user'
     GROUP BY quizzes.id, questions.id
     ORDER BY quizzes.quiz_name, questions.id";
 
@@ -113,6 +110,7 @@ $quizzes = [];
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $quizzes[$row['quiz_id']]['quiz_name'] = $row['quiz_name'];
+        $quizzes[$row['quiz_id']]['creator_name'] = $row['creator_name'];
         $quizzes[$row['quiz_id']]['questions'][$row['question_id']] = [
             'question_name' => $row['question_name'],
             'time_alloted' => $row['time_alloted'],
@@ -122,7 +120,6 @@ if ($result->num_rows > 0) {
     }
 }
 ?>
-
 <!-- Student -->
 <?php
  
@@ -287,123 +284,119 @@ if ($result->num_rows > 0) {
 
 
 
-
-
-
-        <div class="container mt-5">
-            <h1>Create Quiz</h1>
-            <form method="post" action="">
-                <div class="form-group">
-                    <label for="quiz_name">Quiz Name</label>
-                    <input type="text" class="form-control" id="quiz_name" name="quiz_name" required>
-                </div>
-                <div id="questions-container">
-                    <!-- Questions will be dynamically added here -->
-                </div>
-                <button type="button" class="btn btn-secondary" onclick="addQuestion()">Add Question</button>
-                <button type="submit" class="btn btn-primary" name="create_quiz">Create Quiz</button>
-            </form>
-
-            <!-- Display quizzes in a table with CRUD buttons -->
-            <div class="mt-5">
-                <h1>Quiz Details</h1>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Quiz Name</th>
-                            <th>Question Name</th>
-                            <th>Time Alloted (seconds)</th>
-                            <th>Options</th>
-                            <th>Right Answers</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($quizzes as $quiz_id => $quiz): ?>
-                            <tr>
-                                <td rowspan="<?php echo count($quiz['questions']) ?: 1; ?>"><?php echo htmlspecialchars($quiz['quiz_name']); ?></td>
-                                <?php if (count($quiz['questions'])): ?>
-                                    <?php foreach ($quiz['questions'] as $question_id => $question): ?>
-                                        <td><?php echo htmlspecialchars($question['question_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($question['time_alloted']); ?></td>
-                                        <td><?php echo htmlspecialchars(implode(', ', $question['options'])); ?></td>
-                                        <td><?php echo htmlspecialchars(implode(', ', $question['right_answers'])); ?></td>
-                                        <td>
-                                            <!-- Delete Quiz Form -->
-                                            <form method="post" action="" class="d-inline">
-                                                <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($quiz_id); ?>">
-                                                <button type="submit" class="btn btn-danger btn-sm" name="delete_quiz">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <td colspan="5">No questions found.</td>
-                                </tr>
-                                <?php endif; ?>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                    <div class="container mt-5">
+        <h1>Create Quiz</h1>
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="quiz_name">Quiz Name</label>
+                <input type="text" class="form-control" id="quiz_name" name="quiz_name" required>
             </div>
+            <div id="questions-container">
+                <!-- Questions will be dynamically added here -->
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addQuestion()">Add Question</button>
+            <button type="submit" class="btn btn-primary" name="create_quiz">Create Quiz</button>
+        </form>
+
+        <!-- Display quizzes in a table with CRUD buttons -->
+        <div class="mt-5">
+            <h1>Quiz Details</h1>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Quiz Name</th>
+                        <th>Creator Name</th>
+                        <th>Question Name</th>
+                        <th>Time Alloted (seconds)</th>
+                        <th>Options</th>
+                        <th>Right Answers</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($quizzes as $quiz_id => $quiz): ?>
+                        <tr>
+                            <td rowspan="<?php echo count($quiz['questions']) ?: 1; ?>"><?php echo htmlspecialchars($quiz['quiz_name']); ?></td>
+                            <td rowspan="<?php echo count($quiz['questions']) ?: 1; ?>"><?php echo htmlspecialchars($quiz['creator_name']); ?></td>
+                            <?php if (count($quiz['questions'])): ?>
+                                <?php foreach ($quiz['questions'] as $question_id => $question): ?>
+                                    <td><?php echo htmlspecialchars($question['question_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($question['time_alloted']); ?></td>
+                                    <td><?php echo htmlspecialchars(implode(', ', $question['options'])); ?></td>
+                                    <td><?php echo htmlspecialchars(implode(', ', $question['right_answers'])); ?></td>
+                                    <td>
+                                        <!-- Delete Quiz Form -->
+                                        <form method="post" action="" class="d-inline">
+                                            <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($quiz_id); ?>">
+                                            <button type="submit" class="btn btn-danger btn-sm" name="delete_quiz">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <td colspan="6">No questions found.</td>
+                            </tr>
+                            <?php endif; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
-
-
-
-
-
+    </div>
 
     <!-- JavaScript for dynamic form fields -->
-            <script>
-                let questionIndex = 0;
+    <script>
+        let questionIndex = 0;
 
-                function addQuestion() {
-                    const questionTemplate = `
-                        <div class="card mt-3" id="question-card-${questionIndex}">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="questions[${questionIndex}][question_name]">Question Name</label>
-                                    <input type="text" class="form-control" id="questions[${questionIndex}][question_name]" name="questions[${questionIndex}][question_name]" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="questions[${questionIndex}][time_alloted]">Time Alloted (in seconds)</label>
-                                    <input type="number" class="form-control" id="questions[${questionIndex}][time_alloted]" name="questions[${questionIndex}][time_alloted]" required>
-                                </div>
-                                <div id="options-container-${questionIndex}">
-                                    <!-- Options will be dynamically added here -->
-                                </div>
-                                <button type="button" class="btn btn-secondary" onclick="addOption(${questionIndex})">Add Option</button>
-                                <button type="button" class="btn btn-danger" onclick="removeQuestion(${questionIndex})">Remove Question</button>
-                            </div>
+        function addQuestion() {
+            const questionTemplate = `
+                <div class="card mt-3" id="question-card-${questionIndex}">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="questions[${questionIndex}][question_name]">Question Name</label>
+                            <input type="text" class="form-control" id="questions[${questionIndex}][question_name]" name="questions[${questionIndex}][question_name]" required>
                         </div>
-                    `;
-                    document.getElementById('questions-container').insertAdjacentHTML('beforeend', questionTemplate);
-                    questionIndex++;
-                }
-
-                function addOption(questionIndex) {
-                    const optionIndex = document.querySelectorAll(`#options-container-${questionIndex} .form-group`).length;
-                    const optionTemplate = `
-                        <div class="form-group" id="option-${questionIndex}-${optionIndex}">
-                            <label for="questions[${questionIndex}][options][${optionIndex}][option_text]">Option</label>
-                            <input type="text" class="form-control" id="questions[${questionIndex}][options][${optionIndex}][option_text]" name="questions[${questionIndex}][options][${optionIndex}][option_text]" required>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="questions[${questionIndex}][options][${optionIndex}][is_right]" name="questions[${questionIndex}][options][${optionIndex}][is_right]">
-                                <label class="form-check-label" for="questions[${questionIndex}][options][${optionIndex}][is_right]">Correct Answer</label>
-                            </div>
-                            <button type="button" class="btn btn-danger" onclick="removeOption(${questionIndex}, ${optionIndex})">Remove Option</button>
+                        <div class="form-group">
+                            <label for="questions[${questionIndex}][time_alloted]">Time Alloted (seconds)</label>
+                            <input type="number" class="form-control" id="questions[${questionIndex}][time_alloted]" name="questions[${questionIndex}][time_alloted]" required>
                         </div>
-                    `;
-                    document.getElementById(`options-container-${questionIndex}`).insertAdjacentHTML('beforeend', optionTemplate);
-                }
+                        <div id="options-container-${questionIndex}">
+                            <!-- Options will be dynamically added here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addOption(${questionIndex})">Add Option</button>
+                        <button type="button" class="btn btn-danger" onclick="removeQuestion(${questionIndex})">Remove Question</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('questions-container').insertAdjacentHTML('beforeend', questionTemplate);
+            questionIndex++;
+        }
 
-                function removeQuestion(questionIndex) {
-                    document.getElementById(`question-card-${questionIndex}`).remove();
-                }
+        function addOption(questionIndex) {
+            const optionIndex = document.querySelectorAll(`#options-container-${questionIndex} .form-group`).length;
+            const optionTemplate = `
+                <div class="form-group" id="option-${questionIndex}-${optionIndex}">
+                    <label for="questions[${questionIndex}][options][${optionIndex}][option_text]">Option ${optionIndex + 1}</label>
+                    <input type="text" class="form-control" id="questions[${questionIndex}][options][${optionIndex}][option_text]" name="questions[${questionIndex}][options][${optionIndex}][option_text]" required>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="questions[${questionIndex}][options][${optionIndex}][is_right]" name="questions[${questionIndex}][options][${optionIndex}][is_right]">
+                        <label class="form-check-label" for="questions[${questionIndex}][options][${optionIndex}][is_right]">Is Correct</label>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(${questionIndex}, ${optionIndex})">Remove Option</button>
+                </div>
+            `;
+            document.getElementById(`options-container-${questionIndex}`).insertAdjacentHTML('beforeend', optionTemplate);
+        }
 
-                function removeOption(questionIndex, optionIndex) {
-                    document.getElementById(`option-${questionIndex}-${optionIndex}`).remove();
-                }
-            </script>
+        function removeQuestion(questionIndex) {
+            const questionCard = document.getElementById(`question-card-${questionIndex}`);
+            questionCard.parentNode.removeChild(questionCard);
+        }
+
+        function removeOption(questionIndex, optionIndex) {
+            const option = document.getElementById(`option-${questionIndex}-${optionIndex}`);
+            option.parentNode.removeChild(option);
+        }
+    </script>
 
 
 
