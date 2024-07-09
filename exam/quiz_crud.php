@@ -2,7 +2,7 @@
 session_start();
 
 // Check if the user is logged in
-if (!isset($_SESSION['name'])) {
+if (!isset($_SESSION['name']) || !isset($_SESSION['organizationname'])) {
     die("You must be logged in to view this page.");
 }
 
@@ -21,13 +21,14 @@ if ($conn->connect_error) {
 if (isset($_POST['create_quiz'])) {
     $quiz_name = $conn->real_escape_string($_POST['quiz_name']);
     $creator_name = $_SESSION['name']; // Assuming the user's name is stored in the session
+    $organizationname = $_SESSION['organizationname']; // Assuming the organization's name is stored in the session
 
     // Check if the quiz already exists
     $check_sql = "SELECT * FROM quizzes WHERE quiz_name = '$quiz_name'";
     $check_result = $conn->query($check_sql);
     if ($check_result->num_rows == 0) {
         // Insert quiz into database
-        $sql = "INSERT INTO quizzes (quiz_name, creator_name) VALUES ('$quiz_name', '$creator_name')";
+        $sql = "INSERT INTO quizzes (quiz_name, creator_name, organizationname) VALUES ('$quiz_name', '$creator_name', '$organizationname')";
         if ($conn->query($sql) === TRUE) {
             $quiz_id = $conn->insert_id;
 
@@ -54,7 +55,6 @@ if (isset($_POST['create_quiz'])) {
             echo "Error: " . $conn->error;
         }
     } else {
-        
         //echo "Quiz with this name already exists.";
     }
 }
@@ -92,6 +92,7 @@ $sql = "
         quizzes.id AS quiz_id,
         quizzes.quiz_name, 
         quizzes.creator_name,
+        quizzes.organizationname,
         questions.id AS question_id, 
         questions.question_name, 
         questions.time_alloted,
@@ -111,6 +112,7 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $quizzes[$row['quiz_id']]['quiz_name'] = $row['quiz_name'];
         $quizzes[$row['quiz_id']]['creator_name'] = $row['creator_name'];
+        $quizzes[$row['quiz_id']]['organizationname'] = $row['organizationname'];
         $quizzes[$row['quiz_id']]['questions'][$row['question_id']] = [
             'question_name' => $row['question_name'],
             'time_alloted' => $row['time_alloted'],
@@ -306,6 +308,7 @@ if ($result->num_rows > 0) {
                     <tr>
                         <th>Quiz Name</th>
                         <th>Creator Name</th>
+                        <th>Organization Name</th>
                         <th>Question Name</th>
                         <th>Time Alloted (seconds)</th>
                         <th>Options</th>
@@ -318,6 +321,7 @@ if ($result->num_rows > 0) {
                         <tr>
                             <td rowspan="<?php echo count($quiz['questions']) ?: 1; ?>"><?php echo htmlspecialchars($quiz['quiz_name']); ?></td>
                             <td rowspan="<?php echo count($quiz['questions']) ?: 1; ?>"><?php echo htmlspecialchars($quiz['creator_name']); ?></td>
+                            <td rowspan="<?php echo count($quiz['questions']) ?: 1; ?>"><?php echo htmlspecialchars($quiz['organizationname']); ?></td>
                             <?php if (count($quiz['questions'])): ?>
                                 <?php foreach ($quiz['questions'] as $question_id => $question): ?>
                                     <td><?php echo htmlspecialchars($question['question_name']); ?></td>
@@ -334,7 +338,7 @@ if ($result->num_rows > 0) {
                                 </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <td colspan="6">No questions found.</td>
+                                <td colspan="7">No questions found.</td>
                             </tr>
                             <?php endif; ?>
                     <?php endforeach; ?>
@@ -343,7 +347,6 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 
-    <!-- JavaScript for dynamic form fields -->
     <script>
         let questionIndex = 0;
 
@@ -352,7 +355,7 @@ if ($result->num_rows > 0) {
                 <div class="card mt-3" id="question-card-${questionIndex}">
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="questions[${questionIndex}][question_name]">Question Name</label>
+                            <label for="questions[${questionIndex}][question_name]">Question</label>
                             <input type="text" class="form-control" id="questions[${questionIndex}][question_name]" name="questions[${questionIndex}][question_name]" required>
                         </div>
                         <div class="form-group">
@@ -397,7 +400,6 @@ if ($result->num_rows > 0) {
             option.parentNode.removeChild(option);
         }
     </script>
-
 
 
 				</div>

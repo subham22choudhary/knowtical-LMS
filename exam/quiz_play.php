@@ -12,10 +12,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Check if a quiz has been selected
+if (!isset($_POST['quiz_id'])) {
+    header("Location: stu_quiz.php");
+    exit();
+}
+
+$quiz_id = $conn->real_escape_string($_POST['quiz_id']);
+
 // Fetch quiz questions and time allotted for each question from the database
 $sql = "SELECT questions.id AS question_id, questions.question_name, questions.time_alloted, options.id AS option_id, options.option_text, options.is_right
         FROM questions
-        INNER JOIN options ON questions.id = options.question_id";
+        INNER JOIN options ON questions.id = options.question_id
+        WHERE questions.quiz_id = '$quiz_id'";
 $result = $conn->query($sql);
 
 $questions = []; // Array to store questions and correct options
@@ -33,32 +42,32 @@ while ($row = $result->fetch_assoc()) {
 
 // Process form submission
 if (isset($_POST['submit_quiz'])) {
-// Calculate the score
-$total_questions = 0;
-$correct_answers = 0;
-$user_id = $_SESSION['user_id']; // Assuming you have stored the user's ID in the session
+    // Calculate the score
+    $total_questions = 0;
+    $correct_answers = 0;
+    $user_id = $_SESSION['user_id']; // Assuming you have stored the user's ID in the session
 
     // Insert user's selected options into the quiz_answers table
     foreach ($_POST['answer'] as $question_id => $selected_options) {
-    $question_id = $conn->real_escape_string($question_id);
-    foreach ($selected_options as $selected_option) {
-        $selected_option = $conn->real_escape_string($selected_option);
-        $sql = "INSERT INTO quiz_answers (user_id, question_id, selected_option) VALUES ('$user_id', '$question_id', '$selected_option')";
-        $conn->query($sql);
-    }
+        $question_id = $conn->real_escape_string($question_id);
+        foreach ($selected_options as $selected_option) {
+            $selected_option = $conn->real_escape_string($selected_option);
+            $sql = "INSERT INTO quiz_answers (user_id, question_id, selected_option) VALUES ('$user_id', '$question_id', '$selected_option')";
+            $conn->query($sql);
+        }
 
-    // Calculate the score
-    $total_questions++;
-    $correct_for_question = true;
-    $correct_options = array_filter($questions[$question_id]['options'], function($option) {
-        return $option['is_right'] == 1;
-    });
-    $correct_option_ids = array_keys($correct_options);
-    $selected_option_ids = $selected_options;
-    sort($correct_option_ids);
-    sort($selected_option_ids);
+        // Calculate the score
+        $total_questions++;
+        $correct_for_question = true;
+        $correct_options = array_filter($questions[$question_id]['options'], function($option) {
+            return $option['is_right'] == 1;
+        });
+        $correct_option_ids = array_keys($correct_options);
+        $selected_option_ids = $selected_options;
+        sort($correct_option_ids);
+        sort($selected_option_ids);
 
-    if ($correct_option_ids == $selected_option_ids) {
+        if ($correct_option_ids == $selected_option_ids) {
             $correct_answers++;
         }
     }
@@ -102,6 +111,7 @@ $user_id = $_SESSION['user_id']; // Assuming you have stored the user's ID in th
                 <input type="checkbox" name="answer[<?php echo $question_id; ?>][]" value="<?php echo $option_id; ?>"><?php echo $option['option_text']; ?><br>
             <?php endforeach; ?>
         <?php endforeach; ?>
+        <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($quiz_id); ?>">
         <input type="submit" name="submit_quiz" value="Submit Quiz">
     </form>
 
@@ -149,30 +159,14 @@ $user_id = $_SESSION['user_id']; // Assuming you have stored the user's ID in th
             }
         }
     });
-</script>
 
-    <!-- <script>
-        // Countdown timer script
-        const quizForm = document.getElementById('quizForm');
-        const countdownDiv = document.getElementById('countdown');
-        let timeLeft = <?php echo $totalTime; ?>; // Total time allotted for the quiz in seconds
 
-        function updateCountdown() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            countdownDiv.innerHTML = `Time Left: ${minutes}m ${seconds}s`;
 
-            if (timeLeft === 0) {
-                console.log('Time Completed');
-                clearInterval(timer); // Stop the timer when time is up
-                console.log('Timer Stopped');
-                window.location.href = 'stu_score.php?message=Time%20Exceeded'; // Redirect to stu_score.php with message
-            } else {
-                timeLeft--;
-            }
+      // Check if the page was reloaded
+      if (performance.navigation.type === 1) {
+            alert('The page was reloaded. The quiz will now be closed.');
+            window.location.href = 'stu_score.php?message=Page%20Reloaded'; // Redirect to stu_score.php with message
         }
-
-        const timer = setInterval(updateCountdown, 1000); // Update countdown every second
-    </script> -->
+    </script>
 </body>
 </html>
